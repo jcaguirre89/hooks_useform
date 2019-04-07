@@ -6,7 +6,6 @@ function Form({ initialValues, validationSchema }) {
     values,
     errors,
     touched,
-    formValid,
     onChange,
     onBlur,
     onFocus,
@@ -45,9 +44,7 @@ function Form({ initialValues, validationSchema }) {
         {inputList}
         <button type="submit">Submit</button>
       </form>
-      <pre>
-        {JSON.stringify({ values, errors, touched, formValid }, null, 2)}
-      </pre>
+      <pre>{JSON.stringify({ values, errors, touched }, null, 2)}</pre>
     </>
   );
 }

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import yup from "yup";
 
 function useForm(initialValues, validationSchema) {
-  const [formValid, setFormValid] = useState(false);
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
@@ -48,29 +47,18 @@ function useForm(initialValues, validationSchema) {
 
   const onSubmit = () => {
     // Validate all fields
-    validationSchema.validate(values).catch(err => {
-      setFormValid(false);
-      console.log(err);
-      setErrors({
-        ...errors,
-        [err.path]: err.errors
+    validationSchema
+      .validate(values)
+      .then(valid => console.log(values))
+      .catch(err => {
+        setErrors({
+          ...errors,
+          [err.path]: err.errors
+        });
       });
-    });
-    !formValid || Object.keys(errors).length > 0
-      ? console.log("There are errors in the form")
-      : console.log(values);
   };
 
-  return [
-    values,
-    errors,
-    touched,
-    formValid,
-    onChange,
-    onBlur,
-    onFocus,
-    onSubmit
-  ];
+  return [values, errors, touched, onChange, onBlur, onFocus, onSubmit];
 }
 
 export default useForm;
