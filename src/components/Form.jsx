@@ -2,12 +2,21 @@ import React from "react";
 import useForm from "../hooks/useForm";
 
 function Form({ initialValues, validationSchema }) {
-  const [values, onChange, onBlur] = useForm(initialValues, validationSchema);
+  const [
+    values,
+    errors,
+    touched,
+    formValid,
+    onChange,
+    onBlur,
+    onFocus,
+    onSubmit
+  ] = useForm(initialValues, validationSchema);
   const fieldNames = Object.keys(initialValues);
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(values);
+    onSubmit();
   };
 
   const inputList = fieldNames.map((field, idx) => {
@@ -23,16 +32,23 @@ function Form({ initialValues, validationSchema }) {
           value={values[field]}
           onChange={onChange}
           onBlur={onBlur}
+          onFocus={onFocus}
         />
+        {errors && errors[field] && <span>{errors[field]}</span>}
       </>
     );
   });
 
   return (
-    <form onSubmit={handleSubmit}>
-      {inputList}
-      <button type="submit">Submit</button>
-    </form>
+    <>
+      <form onSubmit={handleSubmit}>
+        {inputList}
+        <button type="submit">Submit</button>
+      </form>
+      <pre>
+        {JSON.stringify({ values, errors, touched, formValid }, null, 2)}
+      </pre>
+    </>
   );
 }
 
